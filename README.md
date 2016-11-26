@@ -6,9 +6,9 @@ For details about R-CNN please refer to the paper [Faster R-CNN: Towards Real-Ti
 
 ### Requirements: software
 
-1. Requirements for Tensorflow (see: [Tensorflow](https://www.tensorflow.org/))
+1. Requirements for Tensorflow (see: [Tensorflow](https://www.tensorflow.org/)) - Tested r.011
 
-2. Python packages you might not have: `cython`, `python-opencv`, `easydict`
+2. Python packages needed to run this repo: `cython`, `python-opencv`, `easydict`
 
 ### Requirements: hardware
 
@@ -19,29 +19,32 @@ For details about R-CNN please refer to the paper [Faster R-CNN: Towards Real-Ti
 1. Clone the Faster R-CNN repository
   ```Shell
   # Make sure to clone with --recursive
-  git clone --recursive https://github.com/smallcorgi/Faster-RCNN_TF.git
+  git clone --recursive https://github.com/bigsnarfdude/Faster-RCNN_TF.git
   ```
 
 2. Build the Cython modules
     ```Shell
-    cd $FRCN_ROOT/lib
+    cd Faster-RCNN_TF/lib
     make
     ```
 
-### Demo
+### Quickstart Demo and validate everything is installed correctly
 
 *After successfully completing [basic installation](#installation-sufficient-for-the-demo)*, you'll be ready to run the demo.
 
-Download model training on PASCAL VOC 2007  [[Google Drive]](https://drive.google.com/open?id=0ByuDEGFYmWsbZ0EzeUlHcGFIVWM) [[Dropbox]](https://www.dropbox.com/s/cfz3blmtmwj6bdh/VGGnet_fast_rcnn_iter_70000.ckpt?dl=0)
+You are going to need to download a pretrained model that was trained on PASCAL VOC 2007 dataset. Download from either of these locations and put into the Faster-RCNN_TF directory [[Google Drive]](https://drive.google.com/open?id=0ByuDEGFYmWsbZ0EzeUlHcGFIVWM) [[Dropbox]](https://www.dropbox.com/s/cfz3blmtmwj6bdh/VGGnet_fast_rcnn_iter_70000.ckpt?dl=0)
 
 To run the demo
 ```Shell
-cd $FRCN_ROOT
-./tools/demo.py --model model_path
-```
-The demo performs detection using a VGG16 network trained for detection on PASCAL VOC 2007.
+cd Faster-RCNN_TF/tools
 
-### Training Model
+python demo.py --model /home/ubuntu/Faster-RCNN_TF/VGGnet_fast_rcnn_iter_70000.ckpt --gpu 0
+
+```
+
+The demo.py will load the above pretrained Faster-RCNN_TF network that includes (VGG_ImageNet base and PASCAL 2007 training) and perform detection on each image in the demo.py list. demo.py is located in the tools folder from the project root. The gpu flag will target the first GPU on your box. You can add images into the data folder and run the demo.py against any of your custom photos once you refactor the image list. https://github.com/bigsnarfdude/Faster-RCNN_TF/blob/master/tools/demo.py
+
+### Training Model from scratch for fun
 1. Download the training, validation, test data and VOCdevkit
 
 	```Shell
@@ -85,9 +88,8 @@ The demo performs detection using a VGG16 network trained for detection on PASCA
 6. Run script to train and test model
 	```Shell
 	cd $FRCN_ROOT
-	./experiments/scripts/faster_rcnn_end2end.sh $DEVICE $DEVICE_ID VGG16 pascal_voc
+	./experiments/scripts/faster_rcnn_end2end.sh GPU_ID VGG16 pascal_voc
 	```
-  DEVICE is either cpu/gpu
 
 ### The result of testing on PASCAL VOC 2007 
 
@@ -120,4 +122,3 @@ The demo performs detection using a VGG16 network trained for detection on PASCA
 [Faster R-CNN caffe version](https://github.com/rbgirshick/py-faster-rcnn)
 
 [A tensorflow implementation of SubCNN (working progress)](https://github.com/yuxng/SubCNN_TF)
-

@@ -89,6 +89,7 @@ The demo.py will load the above pretrained Faster-RCNN_TF network that includes 
 	```Shell
 	cd $FRCN_ROOT
 	./experiments/scripts/faster_rcnn_end2end.sh GPU_ID VGG16 pascal_voc
+	./experiments/scripts/faster_rcnn_end2end.sh $DEVICE $DEVICE_ID VGG16 pascal_voc
 	```
 
 ### The result of testing on PASCAL VOC 2007 

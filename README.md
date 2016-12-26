@@ -34,6 +34,12 @@ For details about R-CNN please refer to the paper [Faster R-CNN: Towards Real-Ti
 
 You are going to need to download a pretrained model that was trained on PASCAL VOC 2007 dataset. Download from either of these locations and put into the Faster-RCNN_TF directory [[Google Drive]](https://drive.google.com/open?id=0ByuDEGFYmWsbZ0EzeUlHcGFIVWM) [[Dropbox]](https://www.dropbox.com/s/cfz3blmtmwj6bdh/VGGnet_fast_rcnn_iter_70000.ckpt?dl=0)
 
+Get pretrained model
+```Shell
+wget https://www.dropbox.com/s/cfz3blmtmwj6bdh/VGGnet_fast_rcnn_iter_70000.ckpt?dl=0#
+mv VGGnet_fast_rcnn_iter_70000.ckpt?dl=0# VGGnet_fast_rcnn_iter_70000.ckpt
+```
+
 To run the demo
 ```Shell
 cd Faster-RCNN_TF/tools

@@ -37,7 +37,7 @@ You are going to need to download a pretrained model that was trained on PASCAL 
 Get pretrained model
 ```Shell
 wget https://www.dropbox.com/s/cfz3blmtmwj6bdh/VGGnet_fast_rcnn_iter_70000.ckpt?dl=0#
-mv VGGnet_fast_rcnn_iter_70000.ckpt?dl=0# VGGnet_fast_rcnn_iter_70000.ckpt
+mv VGGnet_fast_rcnn_iter_70000.ckpt?dl=0 VGGnet_fast_rcnn_iter_70000.ckpt
 ```
 
 To run the demo

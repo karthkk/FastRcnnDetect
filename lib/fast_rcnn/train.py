@@ -58,6 +58,8 @@ class SolverWrapper(object):
 
             # scale and shift with bbox reg unnormalization; then save snapshot
             weights_shape = weights.get_shape().as_list()
+            print(self.bbox_stds.shape)
+            print(orig_0.shape)
             sess.run(net.bbox_weights_assign, feed_dict={net.bbox_weights: orig_0 * np.tile(self.bbox_stds, (weights_shape[0], 1))})
             sess.run(net.bbox_bias_assign, feed_dict={net.bbox_biases: orig_1 * self.bbox_stds + self.bbox_means})
 

@@ -13,6 +13,8 @@ from .kitti import kitti
 from .kitti_tracking import kitti_tracking
 from .nissan import nissan
 from .nthu import nthu
+from .office_supplies import office_supplies
+from .armpos import armpos
 from . import factory
 
 import os.path as osp

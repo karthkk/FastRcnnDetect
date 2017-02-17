@@ -13,6 +13,8 @@ import datasets.pascal_voc
 import datasets.imagenet3d
 import datasets.kitti
 import datasets.kitti_tracking
+import datasets.office_supplies
+import datasets.armpos
 import numpy as np
 
 def _selective_search_IJCV_top_k(split, year, top_k):
@@ -75,6 +77,8 @@ for split in ['71', '370']:
     __sets[name] = (lambda split=split:
             datasets.nthu(split))
 
+__sets['office_supplies'] = (lambda: datasets.office_supplies())
+__sets['armpos'] = (lambda: datasets.armpos())
 
 def get_imdb(name):
     """Get an imdb (image database) by name."""

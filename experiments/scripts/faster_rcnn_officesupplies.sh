@@ -38,6 +38,18 @@ case $DATASET in
     PT_DIR="coco"
     ITERS=490000
     ;;
+   office_supplies)
+    ITERS=200
+    TRAIN_IMDB="office_supplies"
+    TEST_IMDB="office_supplies"
+    PT_DIR="office_supplies"
+   ;;
+   armpos)
+    ITERS=2000
+    TRAIN_IMDB="armpos"
+    TEST_IMDB="armpos"
+    PT_DIR="armpos"
+   ;;
   *)
     echo "No dataset given"
     exit
@@ -49,10 +61,10 @@ exec &> >(tee -a "$LOG")
 echo Logging output to "$LOG"
 
 time python ./tools/train_net.py --device ${DEV} --device_id ${DEV_ID} \
-  --weights data/pretrain_model/VGG_imagenet.npy \
+  --weights data/pretrain_model/trained_model.npy \
   --imdb ${TRAIN_IMDB} \
   --iters ${ITERS} \
-  --cfg experiments/cfgs/faster_rcnn_end2end.yml \
+  --cfg experiments/cfgs/faster_rcnn_office_supplies.yml \
   --network VGGnet_train \
   ${EXTRA_ARGS}
 

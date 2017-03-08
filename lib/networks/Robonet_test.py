@@ -1,11 +1,14 @@
 import tensorflow as tf
 from networks.network import Network
 
-n_classes = 2
-_feat_stride = [16,]
-anchor_scales = [8, 16, 32] 
 
-class VGGnet_test(Network):
+_feat_stride = [16,]
+anchor_scales = [8, 16, 32]
+arm_classes = 2
+obj_classes = 9
+
+
+class Robonet_test(Network):
     def __init__(self, trainable=True):
         self.inputs = []
         self.data = tf.placeholder(tf.float32, shape=[None, None, None, 3])
@@ -16,46 +19,46 @@ class VGGnet_test(Network):
         self.setup()
 
 
-    def setup_subtask(self, subtask_name):
+    def setup_subtask(self, subtask_name, n_classes):
         n = lambda x: subtask_name + '_' + x
-        (self.feed('pool2').conv(3, 3, 256, 1, 1, name='conv3_1')
-         .conv(3, 3, 256, 1, 1, name='conv3_2')
-         .conv(3, 3, 256, 1, 1, name='conv3_3')
-         .max_pool(2, 2, 2, 2, padding='VALID', name='pool3')
-         .conv(3, 3, 512, 1, 1, name='conv4_1')
-         .conv(3, 3, 512, 1, 1, name='conv4_2')
-         .conv(3, 3, 512, 1, 1, name='conv4_3')
-         .max_pool(2, 2, 2, 2, padding='VALID', name='pool4')
-         .conv(3, 3, 512, 1, 1, name='conv5_1')
-         .conv(3, 3, 512, 1, 1, name='conv5_2')
-         .conv(3, 3, 512, 1, 1, name='conv5_3'))
+        (self.feed('pool2').conv(3, 3, 256, 1, 1, name=n('conv3_1'))
+         .conv(3, 3, 256, 1, 1, name=n('conv3_2'))
+         .conv(3, 3, 256, 1, 1, name=n('conv3_3'))
+         .max_pool(2, 2, 2, 2, padding='VALID', name=n('pool3'))
+         .conv(3, 3, 512, 1, 1, name=n('conv4_1'))
+         .conv(3, 3, 512, 1, 1, name=n('conv4_2'))
+         .conv(3, 3, 512, 1, 1, name=n('conv4_3'))
+         .max_pool(2, 2, 2, 2, padding='VALID', name=n('pool4'))
+         .conv(3, 3, 512, 1, 1, name=n('conv5_1'))
+         .conv(3, 3, 512, 1, 1, name=n('conv5_2'))
+         .conv(3, 3, 512, 1, 1, name=n('conv5_3')))
 
-        (self.feed('conv5_3')
-         .conv(3, 3, 512, 1, 1, name='rpn_conv/3x3')
-         .conv(1, 1, len(anchor_scales) * 3 * 2, 1, 1, padding='VALID', relu=False, name='rpn_cls_score'))
+        (self.feed(n('conv5_3'))
+         .conv(3, 3, 512, 1, 1, name=n('rpn_conv/3x3'))
+         .conv(1, 1, len(anchor_scales) * 3 * 2, 1, 1, padding='VALID', relu=False, name=n('rpn_cls_score')))
 
-        (self.feed('rpn_conv/3x3')
-         .conv(1, 1, len(anchor_scales) * 3 * 4, 1, 1, padding='VALID', relu=False, name='rpn_bbox_pred'))
+        (self.feed(n('rpn_conv/3x3'))
+         .conv(1, 1, len(anchor_scales) * 3 * 4, 1, 1, padding='VALID', relu=False, name=n('rpn_bbox_pred')))
 
-        (self.feed('rpn_cls_score')
-         .reshape_layer(2, name='rpn_cls_score_reshape')
-         .softmax(name='rpn_cls_prob'))
+        (self.feed(n('rpn_cls_score'))
+         .reshape_layer(2, name=n('rpn_cls_score_reshape'))
+         .softmax(name=n('rpn_cls_prob')))
 
-        (self.feed('rpn_cls_prob')
-         .reshape_layer(len(anchor_scales) * 3 * 2, name='rpn_cls_prob_reshape'))
+        (self.feed(n('rpn_cls_prob'))
+         .reshape_layer(len(anchor_scales) * 3 * 2, name=n('rpn_cls_prob_reshape')))
 
-        (self.feed('rpn_cls_prob_reshape', 'rpn_bbox_pred', 'im_info')
-         .proposal_layer(_feat_stride, anchor_scales, 'TEST', name='rois'))
+        (self.feed(n('rpn_cls_prob_reshape'), n('rpn_bbox_pred'), 'im_info')
+         .proposal_layer(_feat_stride, anchor_scales, 'TEST', name=n('rois')))
 
-        (self.feed('conv5_3', 'rois')
-         .roi_pool(7, 7, 1.0 / 16, name='pool_5')
-         .fc(4096, name='fc6')
-         .fc(4096, name='fc7')
-         .fc(n_classes, relu=False, name='cls_score')
-         .softmax(name='cls_prob'))
+        (self.feed(n('conv5_3'), n('rois'))
+         .roi_pool(7, 7, 1.0 / 16, name=n('pool_5'))
+         .fc(4096, name=n('fc6'))
+         .fc(4096, name=n('fc7'))
+         .fc(n_classes, relu=False, name=n('cls_score'))
+         .softmax(name=n('cls_prob')))
 
-        (self.feed('fc7')
-         .fc(n_classes * 4, relu=False, name='bbox_pred'))
+        (self.feed(n('fc7'))
+         .fc(n_classes * 4, relu=False, name=n('bbox_pred')))
 
     def setup(self):
         (self.feed('data')
@@ -65,6 +68,7 @@ class VGGnet_test(Network):
              .conv(3, 3, 128, 1, 1, name='conv2_1', trainable=False)
              .conv(3, 3, 128, 1, 1, name='conv2_2', trainable=False)
              .max_pool(2, 2, 2, 2, padding='VALID', name='pool2'))
-        self.setup_subtask("arm")
-        self.setup_subtask('obj')
+        self.setup_subtask("arm", arm_classes)
+        self.setup_subtask('obj', obj_classes)
+
 

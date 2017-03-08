@@ -7,4 +7,5 @@
 
 from .VGGnet_train import VGGnet_train
 from .VGGnet_test import VGGnet_test
+from .Robonet_test import Robonet_test
 from . import factory

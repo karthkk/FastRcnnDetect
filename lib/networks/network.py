@@ -55,6 +55,22 @@ class Network(object):
                         if not ignore_missing:
 
                             raise
+    def export_to_dict(self, sess):
+        layers = self.layers
+        out_layers = {}
+        out_dict = {}
+        for layer in layers:
+            if layer in out_layers:
+                continue
+            allvsrs = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, layer)
+            if len(allvsrs) > 0:
+                d={}
+                for variable in allvsrs:
+                    var = variable.name.replace(layer+'/','').split(':')[0]
+                    d[var] = variable.eval(session=sess)
+                out_dict[layer] = d
+        return out_dict
+
 
     def feed(self, *args):
         assert len(args)!=0
@@ -63,7 +79,6 @@ class Network(object):
             if isinstance(layer, basestring):
                 try:
                     layer = self.layers[layer]
-                    print layer
                 except KeyError:
                     print self.layers.keys()
                     raise KeyError('Unknown layer name fed: %s'%layer)

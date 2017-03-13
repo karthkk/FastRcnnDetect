@@ -1,18 +1,19 @@
 import tensorflow as tf
 from networks.network import Network
 
-n_classes = 2
+
 _feat_stride = [16,]
 anchor_scales = [8, 16, 32] 
 
 class VGGnet_test(Network):
-    def __init__(self, trainable=True):
+    def __init__(self, trainable=True, n_classes = 2):
         self.inputs = []
         self.data = tf.placeholder(tf.float32, shape=[None, None, None, 3])
         self.im_info = tf.placeholder(tf.float32, shape=[None, 3])
         self.keep_prob = tf.placeholder(tf.float32)
         self.layers = dict({'data':self.data, 'im_info':self.im_info})
         self.trainable = trainable
+        self.n_classes = n_classes
         self.setup()
 
     def setup(self):
@@ -56,9 +57,9 @@ class VGGnet_test(Network):
              .roi_pool(7, 7, 1.0/16, name='pool_5')
              .fc(4096, name='fc6')
              .fc(4096, name='fc7')
-             .fc(n_classes, relu=False, name='cls_score')
+             .fc(self.n_classes, relu=False, name='cls_score')
              .softmax(name='cls_prob'))
 
         (self.feed('fc7')
-             .fc(n_classes*4, relu=False, name='bbox_pred'))
+             .fc(self.n_classes*4, relu=False, name='bbox_pred'))
 

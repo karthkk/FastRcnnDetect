@@ -16,8 +16,8 @@ def add_path(path):
 
 this_dir = osp.dirname(__file__)
 
-
 # Add caffe to PYTHONPATH
+add_path((this_dir))
 caffe_path = osp.join(this_dir, '..', 'caffe-fast-rcnn', 'python')
 add_path(caffe_path)
 

@@ -22,4 +22,5 @@ def setup(sess):
     models.append(Model("arm", ('__background__',
                                          "arm"
     ), model_location%"armpos/VGGnet_fast_rcnn_iter_2000.ckpt", sess))
+    return models
 

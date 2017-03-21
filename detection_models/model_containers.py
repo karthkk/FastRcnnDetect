@@ -1,6 +1,8 @@
 import _init_paths
 from networks import VGGnet_test
 from fast_rcnn.test import im_detect
+from fast_rcnn.config import cfg
+from fast_rcnn.nms_wrapper import nms
 
 import tensorflow as tf
 import numpy as np
